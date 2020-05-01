@@ -1,1 +1,3 @@
 # toolcode
+selectall是js实现checkbox的全选/反选等功能
+leftandright是js实现
