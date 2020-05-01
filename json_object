@@ -1,0 +1,185 @@
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-core</artifactId>
+      <version>2.10.3</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>2.10.3</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-annotations</artifactId>
+      <version>2.10.3</version>
+    </dependency>
+
+public class JsonTest {
+
+    public static void main(String[] args) {
+        testPojoJson();
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        String json = "{\"code\":100,\"msg\":\"处理成功\",\"extend\":{\"pageInfo\":{\"pageNum\":2,\"pageSize\":5,\"size\":5,\"startRow\":6,\"endRow\":10,\"total\":997,\"pages\":200,\"list\":[{\"empId\":1012,\"empName\":\"69b179\",\"gender\":\"M\",\"email\":\"69b179@bjtu.edu.cn\",\"dId\":1,\"department\":{\"deptId\":1,\"deptName\":\"开发部\"}},{\"empId\":1013,\"empName\":\"ea87910\",\"gender\":\"M\",\"email\":\"ea87910@bjtu.edu.cn\",\"dId\":1,\"department\":{\"deptId\":1,\"deptName\":\"开发部\"}},{\"empId\":1014,\"empName\":\"da54111\",\"gender\":\"M\",\"email\":\"da54111@bjtu.edu.cn\",\"dId\":1,\"department\":{\"deptId\":1,\"deptName\":\"开发部\"}},{\"empId\":1015,\"empName\":\"e854512\",\"gender\":\"M\",\"email\":\"e854512@bjtu.edu.cn\",\"dId\":1,\"department\":{\"deptId\":1,\"deptName\":\"开发部\"}},{\"empId\":1016,\"empName\":\"080e513\",\"gender\":\"M\",\"email\":\"080e513@bjtu.edu.cn\",\"dId\":1,\"department\":{\"deptId\":1,\"deptName\":\"开发部\"}}],\"prePage\":1,\"nextPage\":3,\"isFirstPage\":false,\"isLastPage\":false,\"hasPreviousPage\":true,\"hasNextPage\":true,\"navigatePages\":5,\"navigatepageNums\":[1,2,3,4,5],\"navigateFirstPage\":1,\"navigateLastPage\":5,\"firstPage\":1,\"lastPage\":5}}}";
+        try {
+            JsonNode jsonNode = objectMapper.readTree(json);
+            JsonNode list = jsonNode.findPath("list");
+            System.out.println(list);
+            JavaType javaType = objectMapper.getTypeFactory().constructParametricType(ArrayList.class, Employee.class);
+            List<Employee> employees = objectMapper.readValue(list.toString(), javaType);
+            for (Employee employee : employees) {
+                System.out.println(employee);
+            }
+            System.out.println(objectMapper.writeValueAsString(employees));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void testPojoJson() {
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        String json = "{\"code\": 100,\"msg\": \"处理成功\"}";
+        try {
+            //JSON转Java对象
+            myObject object = objectMapper.readValue(json, myObject.class);
+            System.out.println(object.toString());
+            //Java对象转JSON
+            System.out.println(objectMapper.writeValueAsString(object));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+class myObject{
+    private int code;
+    private String msg;
+
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
+
+    @Override
+    public String toString() {
+        return "myObject{" +
+                "code=" + code +
+                ", msg='" + msg + '\'' +
+                '}';
+    }
+}
+
+class Employee{
+    private Integer empId;
+
+    private String empName;
+
+    private String gender;
+
+    private String email;
+
+    private Integer dId;
+
+    private Department department;
+
+    public Integer getEmpId() {
+        return empId;
+    }
+
+    public void setEmpId(Integer empId) {
+        this.empId = empId;
+    }
+
+    public String getEmpName() {
+        return empName;
+    }
+
+    public void setEmpName(String empName) {
+        this.empName = empName;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Integer getdId() {
+        return dId;
+    }
+
+    public void setdId(Integer dId) {
+        this.dId = dId;
+    }
+
+    public Department getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(Department department) {
+        this.department = department;
+    }
+
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "empId=" + empId +
+                ", empName='" + empName + '\'' +
+                ", gender='" + gender + '\'' +
+                ", email='" + email + '\'' +
+                ", dId=" + dId +
+                ", department=" + department +
+                '}';
+    }
+}
+class Department{
+    private Integer deptId;
+
+    private String deptName;
+
+    public Integer getDeptId() {
+        return deptId;
+    }
+
+    public void setDeptId(Integer deptId) {
+        this.deptId = deptId;
+    }
+
+    public String getDeptName() {
+        return deptName;
+    }
+
+    public void setDeptName(String deptName) {
+        this.deptName = deptName;
+    }
+
+    @Override
+    public String toString() {
+        return "Department{" +
+                "deptId=" + deptId +
+                ", deptName='" + deptName + '\'' +
+                '}';
+    }
+}
