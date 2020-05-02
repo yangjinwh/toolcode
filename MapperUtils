@@ -159,6 +159,21 @@ public class MapperUtils {
         return list;
     }
 
+    /**
+     * 将指定节点的JSON数组转换为集合
+     * @param jsonStr
+     * @param treeNode
+     * @param clazz
+     * @param <T>
+     * @return
+     * @throws Exception
+     */
+    public static <T> List<T> json2listByTree(String jsonStr, String treeNode, Class<T> clazz) throws Exception {
+        JsonNode jsonNode = objectMapper.readTree(jsonStr);
+        JsonNode data = jsonNode.findPath(treeNode);
+        return json2list(data.toString(), clazz);
+    }
+
 
     /**
      * 获取泛型的 Collection Type
